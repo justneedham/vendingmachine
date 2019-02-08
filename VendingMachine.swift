@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum VendingSelection: String {
     case soda
@@ -18,6 +19,14 @@ enum VendingSelection: String {
     case fruitJuice
     case sportsDrink
     case gum
+
+    func icon() -> UIImage {
+        if let image = UIImage(named: self.rawValue) {
+            return image
+        } else {
+            return UIImage(named: "default")!
+        }
+    }
 }
 
 protocol VendingItem {
@@ -31,8 +40,9 @@ protocol VendingMachine {
     var amountDeposited: Double { get set }
 
     init(inventory: [VendingSelection: VendingItem])
-    func vend(_ quantity: Int, _ selection: VendingSelection) throws
+    func vend(selection: VendingSelection, quantity: Int) throws
     func deposit(_ amount: Double)
+    func item(forSelection selection: VendingSelection) -> VendingItem?
 }
 
 struct Item: VendingItem {
@@ -79,6 +89,12 @@ class InventoryUnarchiver{
     }
 }
 
+enum VendingMachineError: Error {
+    case invalidSelection
+    case outOfStock
+    case insufficientFunds(required: Double)
+}
+
 class FoodVendingMachine: VendingMachine {
     let selection: [VendingSelection] = [
         .soda, .dietSoda, .chips,
@@ -93,11 +109,31 @@ class FoodVendingMachine: VendingMachine {
         self.inventory = inventory
     }
 
-    func vend(_ quantity: Int, _ selection: VendingSelection) throws {
+    func vend(selection: VendingSelection, quantity: Int) throws {
+        guard var item = inventory[selection] else {
+            throw VendingMachineError.invalidSelection
+        }
 
+        guard item.quantity >= quantity else {
+            throw VendingMachineError.outOfStock
+        }
+
+        let totalPrice = item.price * Double(item.quantity)
+        if amountDeposited >= totalPrice {
+            amountDeposited -= totalPrice
+            item.quantity -= quantity
+            inventory.updateValue(item, forKey: selection)
+        } else {
+            let amountRequired = totalPrice - amountDeposited
+            throw VendingMachineError.insufficientFunds(required: amountRequired)
+        }
     }
 
     func deposit(_ amount: Double) {
 
+    }
+
+    func item(forSelection selection: VendingSelection) -> VendingItem? {
+        return inventory[selection]
     }
 }
