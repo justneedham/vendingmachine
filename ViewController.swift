@@ -63,8 +63,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         collectionView.collectionViewLayout = layout
     }
-
+    
     // MARK: - Vending Machine
+
     @IBAction func purchase() {
         if let currentSelection = currentSelection {
             do {
@@ -73,7 +74,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             } catch {
                 // FIXME: Error Handling Code
             }
-
+            
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
                 collectionView.deselectItem(at: indexPath, animated: true)
                 updateCell(having: indexPath, selected: false)
@@ -83,7 +84,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             // FIXME: Alert User To No Selection
         }
     }
-
+   
     func updateDisplay() {
         balanceLabel.text = "$\(vendingMachine.amountDeposited)"
         totalLabel.text = "$0.00"

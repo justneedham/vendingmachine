@@ -168,6 +168,9 @@
                                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="75s-Uj-ZkW">
                                                 <rect key="frame" x="273" y="18" width="94" height="29"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <connections>
+                                                    <action selector="updateQuantity:" destination="BYZ-38-t0r" eventType="valueChanged" id="SOa-Zu-VJW"/>
+                                                </connections>
                                             </stepper>
                                         </subviews>
                                         <color key="backgroundColor" red="0.11764705882352941" green="0.14117647058823529" blue="0.15686274509803921" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -188,7 +191,7 @@
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Purchase"/>
                                         <connections>
-                                            <action selector="purchaseWithSender:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HbD-ZY-MiO"/>
+                                            <action selector="purchase" destination="BYZ-38-t0r" eventType="touchUpInside" id="APd-UP-fRy"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -217,6 +220,7 @@
                         <outlet property="collectionView" destination="5AE-ym-lIo" id="uAz-ab-OqY"/>
                         <outlet property="priceLabel" destination="ead-0M-pYt" id="RTr-uD-kAc"/>
                         <outlet property="quantityLabel" destination="gcR-dM-thO" id="dcC-2b-chE"/>
+                        <outlet property="quantityStepper" destination="75s-Uj-ZkW" id="UDf-KY-6Vp"/>
                         <outlet property="totalLabel" destination="voq-ob-7Sb" id="oHb-vP-v4a"/>
                     </connections>
                 </viewController>
