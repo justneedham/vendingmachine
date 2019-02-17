@@ -115,7 +115,7 @@ class FoodVendingMachine: VendingMachine {
             throw VendingMachineError.invalidSelection
         }
 
-        guard item.quantity >= quantity else {
+        guard item.quantity <= quantity else {
             print("Out of Stock")
             throw VendingMachineError.outOfStock
         }
