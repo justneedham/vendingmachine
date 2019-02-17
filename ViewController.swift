@@ -73,8 +73,15 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             do {
                 try vendingMachine.vend(selection: currentSelection, quantity: Int(quantityStepper.value))
                 updateDisplayWith(balance: vendingMachine.amountDeposited, totalPrice: 0.00, itemPrice: 0, itemQty: 1)
-            } catch {
-                // FIXME: Error Handling Code
+            } catch VendingMachineError.outOfStock {
+                showAlert(title: "Out of Stock", message: "This item is out of stock. Please make another selection")
+            } catch VendingMachineError.invalidSelection {
+                showAlert(title: "Invalid Selection", message: "Please select an item to continue")
+            } catch VendingMachineError.insufficientFunds(let required) {
+                let message = "You need $\(required) to complete the transaction"
+                showAlert(title: "Insufficient Funds", message: message)
+            } catch let error {
+                fatalError("\(error)")
             }
             
             if let indexPath = collectionView.indexPathsForSelectedItems?.first {
@@ -116,8 +123,26 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
             updateTotalPrice(for: item)
         }
     }
-    
-    
+
+    func showAlert(title: String, message: String, style: UIAlertControllerStyle = .alert) {
+        let alertController = UIAlertController(
+                title: title,
+                message: message,
+                preferredStyle: style
+        )
+        let okayAction = UIAlertAction(
+                title: "OK",
+                style: .default,
+                handler: dismissAlert
+        )
+        alertController.addAction(okayAction)
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func dismissAlert(sender: UIAlertAction) -> Void {
+        updateDisplayWith(balance: 10, totalPrice: 0, itemPrice: 0, itemQty: 1)
+    }
+
     // MARK: UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
