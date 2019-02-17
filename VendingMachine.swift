@@ -111,20 +111,23 @@ class FoodVendingMachine: VendingMachine {
 
     func vend(selection: VendingSelection, quantity: Int) throws {
         guard var item = inventory[selection] else {
+            print("Invalid Selection")
             throw VendingMachineError.invalidSelection
         }
 
         guard item.quantity >= quantity else {
+            print("Out of Stock")
             throw VendingMachineError.outOfStock
         }
 
-        let totalPrice = item.price * Double(item.quantity)
+        let totalPrice = item.price * Double(quantity)
         if amountDeposited >= totalPrice {
             amountDeposited -= totalPrice
             item.quantity -= quantity
             inventory.updateValue(item, forKey: selection)
         } else {
             let amountRequired = totalPrice - amountDeposited
+            print("Insufficient Funds")
             throw VendingMachineError.insufficientFunds(required: amountRequired)
         }
     }
