@@ -39,7 +39,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         setupCollectionViewCells()
-        updateDisplay()
+        updateDisplayWith()
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,7 +70,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         if let currentSelection = currentSelection {
             do {
                 try vendingMachine.vend(selection: currentSelection, quantity: Int(quantityStepper.value))
-                updateDisplay()
+                updateDisplayWith(balance: vendingMachine.amountDeposited)
             } catch {
                 // FIXME: Error Handling Code
             }
@@ -85,7 +85,10 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         }
     }
    
-    func updateDisplay() {
+    func updateDisplayWith(balance: Double? = nil) {
+        if let balanceValue = balance {
+            balanceLabel.text = "$\(balanceValue)"
+        }
         balanceLabel.text = "$\(vendingMachine.amountDeposited)"
         totalLabel.text = "$0.00"
         priceLabel.text = "$0.00"
