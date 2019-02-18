@@ -133,7 +133,7 @@ class FoodVendingMachine: VendingMachine {
     }
 
     func deposit(_ amount: Double) {
-
+        amountDeposited += amount
     }
 
     func item(forSelection selection: VendingSelection) -> VendingItem? {
